@@ -1,8 +1,6 @@
 import container from "./container";
-import {
-  GetProductByIdAction,
-  GetProductsAction,
-} from "../../domain/usecases/product.action";
+import * as types from "./types";
 
-export const getProductByIdAction = () => container.get(GetProductByIdAction);
-export const getProductsAction = () => container.get(GetProductsAction);
+export const getProductByIdAction = () =>
+  container.get(types.getProductByIdActionId);
+export const getProductsAction = () => container.get(types.getProductsActionId);
