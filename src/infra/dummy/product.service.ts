@@ -7,7 +7,7 @@ export class ProductService {
     { id: "3", name: "Product C", price: 200 },
   ];
 
-  async getAllProducts() : Promise<Product[]> {
+  async getAllProducts(): Promise<Product[]> {
     return Promise.resolve([...this.products]);
   }
 

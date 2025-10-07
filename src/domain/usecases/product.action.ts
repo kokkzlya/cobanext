@@ -16,7 +16,6 @@ export class GetProductByIdAction {
 
 @injectable()
 export class GetProductsAction {
-
   @inject(ProductService)
   private productService!: ProductService;
 
