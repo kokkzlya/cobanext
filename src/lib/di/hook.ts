@@ -1,6 +1,14 @@
 import container from "./container";
-import * as types from "./types";
 
-export const getProductByIdAction = () =>
-  container.get(types.getProductByIdActionId);
-export const getProductsAction = () => container.get(types.getProductsActionId);
+import {
+  createProductActionId,
+  getProductByIdActionId,
+  getProductsActionId,
+} from "../../domain/usecases/product.action";
+
+export const createProductAction = async () =>
+  container.getAsync(createProductActionId);
+export const getProductByIdAction = async () =>
+  container.getAsync(getProductByIdActionId);
+export const getProductsAction = async () =>
+  container.getAsync(getProductsActionId);

@@ -1,16 +1,35 @@
 import { Container } from "inversify";
 
-import * as types from "./types";
 import {
+  CreateProductAction,
   GetProductByIdAction,
   GetProductsAction,
+  createProductActionId,
+  getProductByIdActionId,
+  getProductsActionId,
 } from "../../domain/usecases/product.action";
-import { ProductService } from "../../infra/dummy/product.service";
+import { DataSourceProvider } from "../../infra/sqlite/datasource-provider";
+import { Product } from "../../infra/sqlite/product.entity";
+import { productRepositoryId } from "../../infra/sqlite/product.repository";
+import {
+  ProductService,
+  productServiceId,
+} from "../../infra/sqlite/product.service";
 
 const container = new Container();
 
-container.bind(types.productServiceId).to(ProductService);
-container.bind(types.getProductByIdActionId).to(GetProductByIdAction);
-container.bind(types.getProductsActionId).to(GetProductsAction);
+// Repositories
+container.bind(productRepositoryId).toDynamicValue(async () => {
+  const datasource = await DataSourceProvider.getInitializedInstance();
+  return datasource.getRepository(Product);
+});
+
+// Services
+container.bind(productServiceId).to(ProductService);
+
+// Use Cases
+container.bind(createProductActionId).to(CreateProductAction);
+container.bind(getProductByIdActionId).to(GetProductByIdAction);
+container.bind(getProductsActionId).to(GetProductsAction);
 
 export default container;

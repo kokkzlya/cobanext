@@ -1,13 +1,25 @@
 import "reflect-metadata";
-import { inject, injectable } from "inversify";
+import { ServiceIdentifier, inject, injectable } from "inversify";
 
 import { Product } from "../models/product";
-import { ProductService } from "../../infra/dummy/product.service";
-import * as types from "../../lib/di/types";
+import {
+  ProductService,
+  productServiceId,
+} from "../../infra/sqlite/product.service";
+
+@injectable()
+export class CreateProductAction {
+  @inject(productServiceId)
+  private productService!: ProductService;
+
+  async execute(product: Partial<Product>): Promise<Product> {
+    return this.productService.createProduct(product);
+  }
+}
 
 @injectable()
 export class GetProductByIdAction {
-  @inject(types.productServiceId)
+  @inject(productServiceId)
   private productService!: ProductService;
 
   async execute(id: string): Promise<Product | null> {
@@ -17,10 +29,18 @@ export class GetProductByIdAction {
 
 @injectable()
 export class GetProductsAction {
-  @inject(types.productServiceId)
+  @inject(productServiceId)
   private productService!: ProductService;
 
   async execute(): Promise<Product[]> {
     return this.productService.getAllProducts();
   }
 }
+
+export const createProductActionId: ServiceIdentifier<CreateProductAction> =
+  Symbol("CreateProductActionId");
+export const getProductByIdActionId: ServiceIdentifier<GetProductByIdAction> =
+  Symbol("GetProductByIdActionId");
+export const getProductsActionId: ServiceIdentifier<GetProductsAction> = Symbol(
+  "GetProductsActionId",
+);
